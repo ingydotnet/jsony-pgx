@@ -12,6 +12,8 @@ RCURLY:
   .rgx: \}
 RSQUARE:
   .rgx: \]
+_:
+  .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*
 bare:
   .rgx: ([^\s\{\}\[\]'",]*[^\s\{\}\[\]'",:])
 comment:
@@ -34,14 +36,14 @@ list:
       *\r?\n))*
 map:
   .all:
-  - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*
+  - .ref: _
   - .ref: LCURLY
-  - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*
+  - .ref: _
   - +min: 0
     .ref: pair
-  - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*
+  - .ref: _
   - .ref: RCURLY
-  - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*
+  - .ref: _
 node:
   .any:
   - .ref: map
@@ -62,18 +64,18 @@ scalar:
   - .ref: bare
 seq:
   .all:
-  - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*
+  - .ref: _
   - .ref: LSQUARE
-  - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*
+  - .ref: _
   - +min: 0
     .ref: node
     .sep:
       +eok: 1
       .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*,?(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
         *\r?\n))*
-  - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*
+  - .ref: _
   - .ref: RSQUARE
-  - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*
+  - .ref: _
 single:
   .rgx: '''([^'']*)'''
 string:
@@ -85,7 +87,7 @@ top_map:
   - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*:(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
       *\r?\n))*
   - .ref: node
-  - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*
+  - .ref: _
 top_seq:
   +min: 1
   .ref: top_seq_entry

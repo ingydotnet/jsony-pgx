@@ -2,37 +2,51 @@
 %version 0.0.1
 
 jsony:
-    seq | map | top_seq | top_map | list
+  | seq
+  | map
+  | top_seq
+  | top_map
+  | list
 
-node: map | seq | scalar
+node:
+  | map
+  | seq
+  | scalar
 
 map:
-    ~LCURLY~
-    pair*
-    ~RCURLY~
+  - LCURLY -
+  pair*
+  - RCURLY -
 
-pair: string /~<COLON>?~/ node /~<COMMA>?~/
+pair:
+  string
+  /- <COLON>? -/
+  node
+  /- <COMMA>? -/
 
 seq:
-    ~LSQUARE~
-    node* %% /~<COMMA>?~/
-    ~RSQUARE~
+    - LSQUARE -
+    node* %% /- <COMMA>? -/
+    - RSQUARE -
 
 top_seq: top_seq_entry+
 
 top_seq_entry:
-    /~ <DASH> <SPACE>+ /
+    /- <DASH> <SPACE>+ /
     (
-        node* %% / (: <SPACE>* <COMMA> <SPACE>* <EOL> ~ | <SPACE>+ ) /
+        node* %% / (: <SPACE>* <COMMA> <SPACE>* <EOL> - | <SPACE>+ ) /
         ( <comment> | <EOL> )
     )
 
 top_map:
-    (string /~<COLON>~/ node ~)+
+    (string /- <COLON> -/ node -)+
 
-list: node* %% /~<COMMA>?~/
+list: node* %% /- <COMMA>? -/
 
-scalar: double | single | bare
+scalar:
+  | double
+  | single
+  | bare
 
 string: scalar
 
@@ -80,6 +94,7 @@ excludes: /
 /
 
 ws: /(: <WS> | <comment> )/
+_: /<ws>*/
 
 comment: /(:
     <HASH> <SPACE> <ANY>* <EOL> |
