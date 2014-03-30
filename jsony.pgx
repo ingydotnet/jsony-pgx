@@ -14,34 +14,34 @@ node:
   | scalar
 
 map:
-  - LCURLY -
+  /- '{' -/
   pair*
-  - RCURLY -
+  /- '}' -/
 
 pair:
   string
-  /- <COLON>? -/
+  /- ':'? -/
   node
-  /- <COMMA>? -/
+  /- ','? -/
 
 seq:
-    - LSQUARE -
-    node* %% /- <COMMA>? -/
-    - RSQUARE -
+  /- LSQUARE -/
+  node* %% /- ','? -/
+  /- RSQUARE -/
 
 top_seq: top_seq_entry+
 
 top_seq_entry:
-    /- <DASH> <SPACE>+ /
-    (
-        node* %% / (: <SPACE>* <COMMA> <SPACE>* <EOL> - | <SPACE>+ ) /
-        ( <comment> | <EOL> )
-    )
+  /- '-' SPACE+ /
+  (
+    node* %% / (: SPACE* ',' SPACE* EOL - | SPACE+ ) /
+    ( comment | EOL )
+  )
 
 top_map:
-    (string /- <COLON> -/ node -)+
+    (string /- ':' -/ node -)+
 
-list: node* %% /- <COMMA>? -/
+list: node* %% /- ','? -/
 
 scalar:
   | double
@@ -52,52 +52,53 @@ string: scalar
 
 # Interpretation of http://www.json.org/
 double: /
-    <DOUBLE>
-        (
-            (:
-                <BACK> (:       # Backslash escapes
-                    [
-                        <DOUBLE>    # Double Quote
-                        <BACK>      # Back Slash
-                        <SLASH>     # Foreward Slash
-                        b           # Back Space
-                        f           # Form Feed
-                        n           # New Line
-                        r           # Carriage Return
-                        t           # Horizontal Tab
-                    ]
-                |
-                    u <HEX>{4}      # Unicode octet pair
-                )
-            |
-                [^ <DOUBLE> <CONTROLS> ]  # Anything else
-            )*
+  DOUBLE
+    (
+      (:
+        BACK (:     # Backslash escapes
+          [
+            DOUBLE  # Double Quote
+            BACK    # Back Slash
+            SLASH   # Foreward Slash
+            'b'     # Back Space
+            'f'     # Form Feed
+            'n'     # New Line
+            'r'     # Carriage Return
+            't'     # Horizontal Tab
+          ]
+        |
+          'u' HEX{4}  # Unicode octet pair
         )
-    <DOUBLE>
+      |
+        [^ DOUBLE CONTROLS ]  # Anything else
+      )*
+    )
+  DOUBLE
 /
 
 # TODO: Support '' as escape for single quote
 single: /
-    <SINGLE>
-    ([^ <SINGLE> ]*)
-    <SINGLE>
+  SINGLE
+  ([^ SINGLE ]*)
+  SINGLE
 /
 
-bare: /( [^ <excludes> ]* [^ <excludes> <COLON> ] )/
+bare: /( [^ excludes ]* [^ excludes COLON ] )/
 
 excludes: /
-    <WS>
-    <LCURLY><RCURLY>
-    <LSQUARE><RSQUARE>
-    <SINGLE><DOUBLE>
-    <COMMA>
+  WS
+  LCURLY RCURLY
+  LSQUARE RSQUARE
+  SINGLE DOUBLE
+  COMMA
 /
 
-ws: /(: <WS> | <comment> )/
-_: /<ws>*/
+ws: /(: WS | comment )/
 
 comment: /(:
-    <HASH> <SPACE> <ANY>* <EOL> |
-    <HASH> <EOL> |
-    <SPACE>* <EOL>
+  HASH SPACE ANY* EOL |
+  HASH EOL |
+  SPACE* EOL
 )/
+
+# vim: sw=2:

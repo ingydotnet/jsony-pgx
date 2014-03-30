@@ -4,14 +4,6 @@
 +version: 0.0.1
 EOL:
   .rgx: \r?\n
-LCURLY:
-  .rgx: \{
-LSQUARE:
-  .rgx: \[
-RCURLY:
-  .rgx: \}
-RSQUARE:
-  .rgx: \]
 _:
   .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*
 bare:
@@ -36,14 +28,12 @@ list:
       *\r?\n))*
 map:
   .all:
-  - .ref: _
-  - .ref: LCURLY
-  - .ref: _
+  - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*\{(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
+      *\r?\n))*
   - +min: 0
     .ref: pair
-  - .ref: _
-  - .ref: RCURLY
-  - .ref: _
+  - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*\}(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
+      *\r?\n))*
 node:
   .any:
   - .ref: map
@@ -64,18 +54,16 @@ scalar:
   - .ref: bare
 seq:
   .all:
-  - .ref: _
-  - .ref: LSQUARE
-  - .ref: _
+  - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*\[(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
+      *\r?\n))*
   - +min: 0
     .ref: node
     .sep:
       +eok: 1
       .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*,?(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
         *\r?\n))*
-  - .ref: _
-  - .ref: RSQUARE
-  - .ref: _
+  - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*\](?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
+      *\r?\n))*
 single:
   .rgx: '''([^'']*)'''
 string:
