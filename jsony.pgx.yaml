@@ -20,10 +20,16 @@ jsony:
   - .ref: top_map
   - .ref: list
 list:
-  +min: 0
-  .ref: node
-  .sep:
-    +eok: 1
+  +max: 1
+  -flat: 1
+  .all:
+  - .ref: node
+  - +min: 0
+    .all:
+    - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*,?(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
+        *\r?\n))*
+    - .ref: node
+  - +max: 1
     .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*,?(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
       *\r?\n))*
 map:
@@ -56,10 +62,16 @@ seq:
   .all:
   - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*\[(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
       *\r?\n))*
-  - +min: 0
-    .ref: node
-    .sep:
-      +eok: 1
+  - +max: 1
+    -flat: 1
+    .all:
+    - .ref: node
+    - +min: 0
+      .all:
+      - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*,?(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
+          *\r?\n))*
+      - .ref: node
+    - +max: 1
       .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*,?(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
         *\r?\n))*
   - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*\](?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
@@ -83,10 +95,15 @@ top_seq_entry:
   .all:
   - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*\-\ +
   - .all:
-    - +min: 0
-      .ref: node
-      .sep:
-        +eok: 1
+    - +max: 1
+      -flat: 1
+      .all:
+      - .ref: node
+      - +min: 0
+        .all:
+        - .rgx: (?:\ *,\ *\r?\n(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*|\ +)
+        - .ref: node
+      - +max: 1
         .rgx: (?:\ *,\ *\r?\n(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*|\ +)
     - .any:
       - .ref: comment
