@@ -21,10 +21,10 @@ jsony:
   - .ref: list
 list:
   +max: 1
-  -flat: 1
   .all:
   - .ref: node
   - +min: 0
+    -flat: 1
     .all:
     - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*,?(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
         *\r?\n))*
@@ -63,10 +63,10 @@ seq:
   - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*\[(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
       *\r?\n))*
   - +max: 1
-    -flat: 1
     .all:
     - .ref: node
     - +min: 0
+      -flat: 1
       .all:
       - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*,?(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\
           *\r?\n))*
@@ -96,10 +96,10 @@ top_seq_entry:
   - .rgx: (?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*\-\ +
   - .all:
     - +max: 1
-      -flat: 1
       .all:
       - .ref: node
       - +min: 0
+        -flat: 1
         .all:
         - .rgx: (?:\ *,\ *\r?\n(?:\s|(?:\#\ .*\r?\n|\#\r?\n|\ *\r?\n))*|\ +)
         - .ref: node
